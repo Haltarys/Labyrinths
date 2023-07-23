@@ -1,2 +1,3 @@
 # Labyrinths
-Fiddling with computer-generated mazes in Ruby
+
+Fiddling with computer-generated mazes in Ruby.
