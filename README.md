@@ -8,11 +8,15 @@ Welcome to your new gem! In this directory, you'll find the files you need to be
 
 Install the gem and add to the application's Gemfile by executing:
 
-    bundle add labyrinths
+```bash
+bundle add labyrinths
+```
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
-    gem install labyrinths
+```bash
+gem install labyrinths
+```
 
 ## Usage
 
