@@ -57,3 +57,7 @@ build-iPhoneSimulator/
 
 # rspec failure tracking
 .rspec_status
+
+# Ignore Gemfile.lock since we're developing a gem
+# see (https://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/)
+Gemfile.lock
