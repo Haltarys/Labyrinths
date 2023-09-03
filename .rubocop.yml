@@ -1,0 +1,6 @@
+# The 'Ruby LSP' extension uses Rubocop to lint the code but it does not recognise
+# the style enforced by standardrb (which enforces a static rubocop configuration.)
+# This file disables the rules where the Ruby LSP conflicts with the Standardrb LSP.
+
+Style/StringLiterals:
+  Enabled: false
