@@ -1,8 +1,14 @@
 # frozen_string_literal: true
 
-require_relative "labyrinths/version"
+require "thor"
 
 module Labyrinths
-  class Error < StandardError; end
-  # Your code goes here...
+  # CLI driver for the Labyrinths gem.
+  class CLI < Thor
+    desc "hello NAME", "Prints 'Hello \#{NAME}!'"
+    method_option :capitalise, aliases: "-c", type: :boolean, default: false
+    def hello(name)
+      puts "Hello #{options[:capitalise] ? name.capitalize : name}!"
+    end
+  end
 end
