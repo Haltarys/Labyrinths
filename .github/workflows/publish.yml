@@ -1,4 +1,4 @@
-name: Publish to RubyGems and GitHub Packages
+name: Publish
 
 on:
   # release:
