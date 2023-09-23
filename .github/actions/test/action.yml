@@ -1,0 +1,13 @@
+name: Test
+description: Tests and lints the gem
+
+runs:
+  using: composite
+  steps:
+    - name: Test
+      run: bundle exec rake spec
+      shell: bash
+
+    - name: Lint
+      run: bundle exec rake standard
+      shell: bash

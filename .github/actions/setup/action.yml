@@ -1,0 +1,19 @@
+name: Setup
+description: Sets up Ruby and installs dependencies with Bundler
+
+inputs:
+  ruby-version:
+    description: Ruby version to use
+    default: '3.2.2'
+
+runs:
+  using: composite
+  steps:
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ inputs.ruby-version }}
+        bundler-cache: true
+
+    - name: Install dependencies
+      run: bundle install
+      shell: bash
