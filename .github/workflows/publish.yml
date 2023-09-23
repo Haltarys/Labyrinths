@@ -4,19 +4,16 @@ on:
   # release:
   #   types: published
   workflow_dispatch:
-  # pull_request:
-  #   branches: master
-  #   types: closed
-  push:
-    branches:
-      - master
+  pull_request:
+    branches: master
+    types: closed
 
 env:
   RUBY_VERSION: '3.2.2'
 
 jobs:
   build:
-    # aif: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     name: Build
     runs-on: ubuntu-latest
 
