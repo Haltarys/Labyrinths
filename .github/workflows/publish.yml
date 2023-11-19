@@ -1,21 +1,43 @@
 name: Publish
 
 on:
-  # release:
-  #   types: published
   workflow_dispatch:
-  pull_request:
-    branches: master
-    types: closed
+    inputs:
+      gem_version_level:
+        required: true
+        description: 'Gem version level (major, minor, patch)'
+        type: choice
+        options:
+          - 'major'
+          - 'minor'
+          - 'patch'
 
 env:
   RUBY_VERSION: '3.2.2'
 
 jobs:
-  build:
-    if: github.event.pull_request.merged == true
-    name: Build
+  bump-version:
+    name: Bump version
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          install-gem-release: 'true'
+
+      - name: Bump version
+        run: |
+          gem bump --version ${{ github.event.inputs.gem_version_level }}
+          git push --tags origin
+
+  publish-rubygems:
+    name: Publish to RubyGems
+    runs-on: ubuntu-latest
+    needs: bump-version
 
     steps:
       - name: Checkout
@@ -25,48 +47,20 @@ jobs:
         uses: ./.github/actions/setup
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
-
-      - name: Build
-        run: gem build *.gemspec
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-artifact
-          path: '*.gem'
-
-  publish-rubygems:
-    name: Publish to RubyGems
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Fetch artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: build-artifact
-
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ env.RUBY_VERSION }}
-          bundler-cache: true
+          install-gem-release: 'true'
 
       - name: Setup credentials
         uses: ./.github/actions/credentials
         with:
           gem-host-api-key: ${{ secrets.RUBYGEMS_API_KEY }}
 
-      - name: Push to RubyGems
-        run: gem push *.gem
+      - name: Release to RubyGems
+        run: gem release
 
   publish-github-packages:
     name: Publish to GitHub Packages
     runs-on: ubuntu-latest
-    needs: build
+    needs: bump-version
     permissions:
       packages: write
       contents: read
@@ -75,24 +69,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Fetch artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: build-artifact
-
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Setup
+        uses: ./.github/actions/setup
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
-          bundler-cache: true
+          install-gem-release: 'true'
 
       - name: Setup credentials
         uses: ./.github/actions/credentials
         with:
           gem-host-api-key: 'Bearer ${{secrets.GITHUB_TOKEN}}'
-          # key-name: github
 
       - name: Push to GitHub Packages
-        run: gem push --host https://rubygems.pkg.github.com/${OWNER} *.gem
-        env:
-          OWNER: ${{ github.repository_owner }}
+        run: gem release --github
