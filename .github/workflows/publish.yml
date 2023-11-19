@@ -29,6 +29,11 @@ jobs:
           ruby-version: ${{ env.RUBY_VERSION }}
           install-gem-release: 'true'
 
+      - name: Setup Git user
+        run: |
+          git config --global user.name '${{ github.actor }}'
+          git config --global user.email '${{ github.actor }}@users.noreply.github.com'
+
       - name: Bump version
         run: |
           gem bump --version ${{ github.event.inputs.gem_version_level }}
