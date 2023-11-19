@@ -5,6 +5,9 @@ inputs:
   ruby-version:
     description: Ruby version to use
     default: '3.2.2'
+  install-gem-release:
+    description: Whether to install the `gem-release` gem
+    default: 'false'
 
 runs:
   using: composite
@@ -17,4 +20,9 @@ runs:
 
     - name: Install dependencies
       run: bundle install
+      shell: bash
+
+    - name: Install `gem release`
+      if: ${{ inputs.install-gem-release == 'true' }}
+      run: gem install gem-release
       shell: bash
