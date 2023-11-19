@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["Haltarys"]
   spec.email = ["45515869+Haltarys@users.noreply.github.com"]
 
-  spec.summary = "Fiddling with computer-generated mazes in Ruby."
-  spec.description = "A library to procedurally generate mazes in Ruby in the terminal."
+  spec.summary = "A library to procedurally generate mazes in Ruby in the terminal."
+  spec.description = "Fiddling with computer-generated mazes in Ruby."
   spec.homepage = "https://github.com/Haltarys/Labyrinths"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.7"
@@ -29,6 +29,8 @@ Gem::Specification.new do |spec|
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+
+  spec.platform = Gem::Platform::RUBY
 
   spec.add_development_dependency "rspec", "~> 3.0"
 
